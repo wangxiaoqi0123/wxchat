@@ -1,11 +1,13 @@
 {
   "pages": [
+    
     "pages/daka/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/counter/main",
     "pages/my/main",
-    "pages/shenqing/main"
+    "pages/shenqing/main",
+    "pages/shenqingxiangqing/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
