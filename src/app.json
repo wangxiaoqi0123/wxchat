@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/my/main",
     "pages/daka/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/counter/main",
-    "pages/my/main",
     "pages/shenqing/main"
   ],
   "window": {
