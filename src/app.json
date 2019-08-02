@@ -1,13 +1,22 @@
 {
   "pages": [
+<<<<<<< HEAD
  
     "pages/shenqing/main",
+=======
+    
+>>>>>>> 66b2c3ca7df7b18ebe504802f803bf86bacca68b
     "pages/daka/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/counter/main",
     "pages/my/main",
+<<<<<<< HEAD
     "pages/qjdetail/main"
+=======
+    "pages/shenqing/main",
+    "pages/shenqingxiangqing/main"
+>>>>>>> 66b2c3ca7df7b18ebe504802f803bf86bacca68b
   ],
   "window": {
     "backgroundTextStyle": "light",
