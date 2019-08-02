@@ -5,11 +5,10 @@
     "pages/logs/main",
     "pages/counter/main",
     "pages/my/main",
-
     "pages/qjdetail/main",
-
     "pages/shenqing/main",
     "pages/shenqingxiangqing/main"
+
 
   ],
   "permission": {

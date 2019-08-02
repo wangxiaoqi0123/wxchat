@@ -1,9 +1,11 @@
 <template>
   <div class="qjbox">
+    <a href="/pages/shenqingxiangqing/main">
     <div class="qjdiv">
       <img src="/static/images/qj.png" alt />
       <span>请假</span>
     </div>
+    </a>
     <a href="/pages/qjdetail/main">
       <div class="jldiv" @click="gotodetail">
         <img src="/static/images/qj.png" alt />
