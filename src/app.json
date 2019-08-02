@@ -1,12 +1,36 @@
 {
   "pages": [
+<<<<<<< HEAD
     "pages/my/main",
+=======
+<<<<<<< HEAD
+ 
+    "pages/shenqing/main",
+=======
+    
+>>>>>>> 66b2c3ca7df7b18ebe504802f803bf86bacca68b
+>>>>>>> 560b18242e48fdc9735b805646c1e109219370b1
     "pages/daka/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/counter/main",
+<<<<<<< HEAD
     "pages/shenqing/main"
+=======
+    "pages/my/main",
+<<<<<<< HEAD
+    "pages/qjdetail/main"
+=======
+    "pages/shenqing/main",
+    "pages/shenqingxiangqing/main"
+>>>>>>> 66b2c3ca7df7b18ebe504802f803bf86bacca68b
+>>>>>>> 560b18242e48fdc9735b805646c1e109219370b1
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
