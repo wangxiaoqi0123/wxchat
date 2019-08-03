@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "打卡"
+  "navigationBarTitleText": "打卡",
+  "navigationBarBackgroundColor": "#2890ff",
+  "navigationBarTextStyle": "white"
 }

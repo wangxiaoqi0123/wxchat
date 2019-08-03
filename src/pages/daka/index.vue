@@ -8,10 +8,10 @@
       <div class="userinfo">
         <div class="u-left">
           <div class="avatar">
-            <img :src="avatar" alt />
+            <img :src="avatarUrl" alt />
           </div>
           <div class="location-info">
-            <p class="mingzi">啦啦啦</p>
+            <p class="mingzi">{{nickName}}</p>
             <p class="weizhi">
               <img class="dingwei" src="/static/images/biaoji.png" alt />
               <span>啦啦啦啦啦啦啦啦</span>
@@ -28,18 +28,18 @@
         <h2>今日打卡</h2>
         <div>
           <p v-if="!!atime">
-            <i></i>
+            <i :style="{backgroundColor:chidaoFlag ? 'red' :'#30dab6'}"></i>
             {{atime}}
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <span>签到</span>
+            <span>{{chidaoFlag?"迟到":"签到"}}</span>
           </p>
         </div>
         <div>
           <p v-if="!!ptime">
-            <i></i>
+            <i :style="{backgroundColor:zaotuiFlag ? 'red' :'#30dab6'}"></i>
             {{ptime}}
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <span>签退</span>
+            <span>{{zaotuiFlag?"早退":"签退"}}</span>
           </p>
         </div>
       </div>
@@ -63,24 +63,49 @@ import store from "@/pages/counter/store.js";
 export default {
   data() {
     return {
-      msg: "打卡",
-      avatar: "/static/images/avatar.png",
       time: "",
       atime: "",
       ptime: "",
       sign: "签到",
-      clickDate: 0
+      clickDate: 0,
+      chidaoFlag: false,
+      zaotuiFlag: false,
+      avatarUrl: "",
+      nickName: ""
     };
   },
   components: {
     MMap
   },
   mounted() {
+    //------------------------------
+    // 请求用户头像与信息
+    wx.getUserInfo({
+      success: res => {
+        this.avatarUrl = res.userInfo.avatarUrl;
+        this.nickName = res.userInfo.nickName;
+      }
+    });
+    //------------------------------
     setInterval(() => {
       this.format();
     }, 1000);
   },
   methods: {
+    /* 
+      签到成功后数据存储 
+      需要一个数据格式
+      {
+        data // 年月日
+        atime // 早上打卡时间
+        ptime // 晚上打卡时间
+        chidaoFlag // true迟到 / false正常
+        zaotuiFlag // true早退 / false正常
+        username // 那个人?
+      }
+
+    */
+
     qiandao() {
       // 判断地理位置逻辑
 
@@ -100,11 +125,13 @@ export default {
           console.log(111, Math.abs(longitude - Ylongitude));
           console.log(222, Math.abs(latitude - Ylatitude));
 
+          // 判断范围逻辑
           // 纬度1度 = 大约111km
           // 0.002 = 0.111km
           // 给定一个两百米的范围
           // 点击时在范围内就允许打卡
           // 不在范围内就不让打卡,给出提示
+
           if (
             Math.abs(longitude - Ylongitude) < 0.002 &&
             Math.abs(latitude - Ylatitude) < 0.002
@@ -113,21 +140,47 @@ export default {
             if (!this.atime) {
               // 防止用户连续点击
               console.log(222, new Date());
-              console.log(33333, new Date() - this.clickDate);
-
+              // console.log(33333, new Date() - this.clickDate);
               this.clickDate = new Date();
 
               this.atime = this.time;
-              wx.showToast({
-                title: "签到成功",
-                icon: "success",
-                duration: 2000
-              });
+
+              // 签到成功的逻辑
+              // 签到成功判断用户是否迟到
+              // 需要一个固定上班时间 8:30
+              let Chou = new Date().getHours();
+              let Cmin = new Date().getMinutes();
+
+              if (Chou < 8) {
+                // 正常
+                wx.showToast({
+                  title: "签到成功",
+                  icon: "success",
+                  duration: 2000
+                });
+              } else if (Chou == 8 && Cmin <= 30) {
+                // 正常
+                wx.showToast({
+                  title: "签到成功",
+                  icon: "success",
+                  duration: 2000
+                });
+              } else {
+                // 迟到
+                wx.showToast({
+                  title: "迟到 ~~",
+                  icon: "none",
+                  duration: 2000
+                });
+
+                this.chidaoFlag = true;
+              }
+
               this.sign = "签退";
             } else {
               console.log(33333, new Date() - this.clickDate);
-              // 放置用户点击出错
-              if (new Date() - this.clickDate <= 100000) {
+              // 防止用户点击出错 10s 内不可重复点击
+              if (new Date() - this.clickDate <= 10000) {
                 wx.showToast({
                   title: "不要重复点击",
                   icon: "none",
@@ -135,11 +188,30 @@ export default {
                 });
               } else {
                 this.ptime = this.time;
-                wx.showToast({
-                  title: "签退成功",
-                  icon: "success",
-                  duration: 2000
-                });
+
+                // 签退成功的逻辑
+                // 签到成功判断用户是否早退
+                // 需要一个固定上班时间 18:00
+                let Chou = new Date().getHours();
+                let Cmin = new Date().getMinutes();
+
+                if (Chou > 18) {
+                  // 正常
+                  wx.showToast({
+                    title: "签退成功",
+                    icon: "success",
+                    duration: 2000
+                  });
+                } else {
+                  // 早退
+                  this.zaotuiFlag = true;
+                  wx.showToast({
+                    title: "早退 ~~",
+                    icon: "none",
+                    duration: 2000
+                  });
+                }
+
                 this.sign = "已签退";
               }
             }
@@ -287,7 +359,6 @@ export default {
   height: 12px;
   margin-right: 20px;
   border-radius: 50%;
-  background-color: #30dab6;
 }
 
 .yuanbox {
